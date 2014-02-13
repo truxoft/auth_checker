@@ -50,40 +50,40 @@ Examples of use:
 List all Exim SMTP accounts successfully accessed within one day by at least one 
 IP addresses not whitelisted in the script:
 
-./auth_checker.pl
+`./auth_checker.pl`
 
 List all user accounts successfully accessed by 10 or more different IP addresses 
 in a single day. Also parsing the default Exim logs and looking for successful SMTP 
 authentications:
 
-./auth_checker.pl --limit 10
+`./auth_checker.pl --limit 10`
 
 The same thing, but using the abbreviated option name 'l' (lowercase L):
 
-./auth_checker.pl -l 10
+`./auth_checker.pl -l 10`
 
 Specify a different log file, and suppress grouping by date (makes sense only if the
 file contains logs for more than a single day). We also use a negative --limit value 
 for counting all IP addresses, including the whitelisted ones, and showing accounts
 with more than 3 accessing IP addresses:
 
-./auth_checker.pl --limit -3 --nodate /var/log/exim-main.log.02.bz2
+`./auth_checker.pl --limit -3 --nodate /var/log/exim-main.log.02.bz2`
 
 Display all IP addresses (including the whitelisted ones) accessing POP3 or IMAP account 
 of the user 'joedoe', that are recorded in the default Dovecot log file /var/log/maillog.
 We also turn off the verbose GeoIP information by setting the brief --geoip mode 1
 instead of the default 2 (0 suppresses the GeoIP information altogether):
 
-./auth_checker.pl --mode dovecot --user joedoe --geoip 1
+`./auth_checker.pl --mode dovecot --user joedoe --geoip 1`
 
-Short form: ./auth_checker.pl -m dovecot -u joedoe -g 1
+Short form: `./auth_checker.pl -m dovecot -u joedoe -g 1`
 
 Listing authorized accesses to password protected web pages, grouping all IP's together,
 suppressing the grouping by user account (--nouser), suppressing the grouping by date
 (--nodate), turning off the Geo IP information (--geoip 0), found in the log /logs/my.log.gz
 
-./auth_checker.pl --mode apache --nouser --nodate --geoip 0 /logs/my.log.gz
-./auth_checker.pl -m apache --nouser --nodate -g 0 /logs/my.log.gz
+`./auth_checker.pl --mode apache --nouser --nodate --geoip 0 /logs/my.log.gz`
+`./auth_checker.pl -m apache --nouser --nodate -g 0 /logs/my.log.gz`
 
 The following cronjob example every hour parses the default log files for all supported 
 services (Exim SMTP, Dovecot POP3/IMAP, SSH, OpenWebMail, and Apache HTTP), and if it 
@@ -93,7 +93,7 @@ suppress the header in case there are no violations found. This is important to 
 sending empty emails every hour, and rather send the alert only when there is a reason.
 This is achieved with the option -E at mail (suppression of sending empty messages).
 
-55 * * * * /my/path/auth_checker.pl -l 20 -m all -q | /usr/bin/mail -Es "Auth Report" root
+`55 * * * * /my/path/auth_checker.pl -l 20 -m all -q | /usr/bin/mail -Es "Auth Report" root`
 
 
 Typical otput of the script looks as follows. The first column shows the number of 
@@ -102,7 +102,7 @@ country name, city (if known), and the name of the Internet Access Provider who
 owns the IP address. The localizaton information can be optionally shortended with
 the option --geoip 1, or suppressed altogether with --geoip 0
 
-<pre>
+```
 Feb 13 -> account joedoe: 1 IPs (Last: 88.66.22.22 @ 00:13:34)
    1     88.66.22.22       France, Lyon - Free SAS
  
@@ -112,7 +112,7 @@ Feb 13 -> account smith: 1 IPs (Last: 65.55.41.140 @ 00:10:05)
 Feb 13 -> account hill: 2 IPs (Last: 37.188.232.65 @ 00:15:16)
    1     37.188.232.65     Czech Republic - Telefonica Czech Republic, a.s.
    1     37.188.236.46     Czech Republic - Telefonica Czech Republic, a.s.
-</pre>
+```
 
 
 Contact:
