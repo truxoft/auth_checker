@@ -100,7 +100,7 @@ Thanks:
 -------
 
 **Todd Lyons** 
-   - for the original script detect_hacked_smtp_auth_conns.pl
+   - for the original script [detect_hacked_smtp_auth_conns.pl](https://github.com/Exim/exim/wiki/DetectSMTPAuthAbuse)
 
 **Ivo Truxa**  
    - the redesign, 
