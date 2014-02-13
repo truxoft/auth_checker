@@ -83,6 +83,7 @@ suppressing the grouping by user account (--nouser), suppressing the grouping by
 (--nodate), turning off the Geo IP information (--geoip 0), found in the log /logs/my.log.gz
 
 `./auth_checker.pl --mode apache --nouser --nodate --geoip 0 /logs/my.log.gz`
+
 `./auth_checker.pl -m apache --nouser --nodate -g 0 /logs/my.log.gz`
 
 The following cronjob example every hour parses the default log files for all supported 
