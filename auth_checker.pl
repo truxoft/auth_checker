@@ -4,7 +4,7 @@
 # (based on the script detect_hacked_smtp_auth_conns.pl  by Todd Lyons)
 
 # ------- VERSION -----------------------------------------------------
-my $version = "2.02";
+my $version = "2.03";
 my $verdate = "2014-02-13";
 
 # ------- CONFIGURATION -----------------------------------------------
@@ -13,12 +13,12 @@ my $geoip_db_path     = '/usr/local/share/GeoIP';
 my $ignored_countries = 'CZ|FR';
 my @ignored_users     = qw//;
 my @ignored_ips       = qw/^127.0.0.1$ ^89.2\.152.32$ ^82.67.20\.20$ ^88.100.17\.83$ ^90.183.165.12[2|4]$ ^90.183.21\.94$ ^90.182.9\.41$ ^194.228.149.244$ ^89.177.86.166$/;
-my %log_file          = (
-        'exim'        => '/var/log/exim/mainlog',
-        'dovecot'     => '/var/log/maillog',
-        'ssh'         => '/var/log/auth.log',
-        'openwm'      => '/var/log/openwebmail.log',
-        'apache'      => '/var/log/httpd/access.log',
+my %log_files         = (
+        'exim'        => '/var/log/exim/mainlog*',
+        'dovecot'     => '/var/log/maillog*',
+        'ssh'         => '/var/log/auth.log*',
+        'openwm'      => '/var/log/openwebmail.log*',
+        'apache'      => '/var/log/httpd/access.log*',
         'all'         => 'default log files'
 );
 push(@ignored_ips, &ignore_ISPs);
@@ -65,6 +65,11 @@ my $u2 = "  usage: detect_auth_abuse.pl [options...] [logfile]                  
          "                          '/var/log/auth' for mode ssh, and                            \n".
          "                          '/var/log/httpd/access.log' for mode apache                  \n";
 my $changelog =
+" 2.03 [Ivo Truxa] 02/13/2014                                                                    \n".
+"       - IO::Uncompress::AnyUncompress added for better compressed file support (conditional)   \n".
+"       - added wildcards support - log file names can now include wildcards                     \n".
+"       - default log file names changed to contain wildcards now                                \n".
+"       - added listung of all parsed log files to the report header                             \n".
 " 2.02 [Ivo Truxa] 02/13/2014                                                                    \n".
 "       - negative --limit now bypasses the exception checking - all access IPs will be counted  \n".
 "         and the absolute value of the limit option will be used as the trigger                 \n".
@@ -146,7 +151,7 @@ if ( !($opts{'mode'} =~ /all/) ) {
 }
 
 my ($fh, $found, $geoip1, $geoip2, $geoip_pure);
-my $header  = "\n". uc($opts{'mode'}) .": authenticated access in $log_file{$opts{'mode'}}\n";
+my $header  = "\nReport of Authenticated Access by Unknown IP Addresses:\n";
 
 if ($opts{'geoip'}) {
     require Geo::IP;
@@ -167,34 +172,40 @@ if ($opts{'geoip'}) {
 }
 
 foreach my $mode (@modes) {
-  next unless ($fh = &get_handle($mode));
-  while (<$fh>) {
-    my $foreign = 0;
-    my ($date,$time,$ip,$type,$auth,$user);
-    if ( $_ =~ /$log_pattern{$mode}/ ) {
-        eval("( $log_vars{$mode} ) = (\$1,\$2,\$3,\$4,\$5,\$6)");
-        if ( !defined $opts{'user'} && $opts{'limit'}>=0 ) {
-            next if ( grep {/^$user$/}   @ignored_users );
-            next if ( grep {$ip =~ /$_/} @ignored_ips );
-        }
-        my $country_id;
-        if (defined $opts{'geoip'} && $opts{'geoip'}) {
-            if ($geoip_pure) {
-                ($country_id) = $geoip1->get_city_record($ip);
-            } else {
-                my $rec = $geoip1->record_by_addr($ip);
-                $country_id = $rec->country_code;
-            }
-        }
-        if (defined $opts{'nodate'}) {$date = 'all dates';}
-        if (defined $opts{'nouser'}) {$user = 'all users';}
-        if (defined $country_id) {
-            $foreign = 0 + !($country_id =~ /$ignored_countries/);
-        }
-        $found->{$date}->{$user}->{'ip'}->{$ip}++;
-        $found->{$date}->{$user}->{'lasttime'} = $time;
-        $found->{$date}->{$user}->{'lastip'}   = $ip;
-        $found->{$date}->{$user}->{'foreign'}  = $foreign;
+
+  my @files = (@ARGV)? @ARGV : glob($log_files{$mode});
+  for my $file (@files) {
+    $header .= "    ". uc($mode) .": $file \n";
+    next unless ($fh = &get_handle($file));
+
+    while (<$fh>) {
+	my $foreign = 0;
+	my ($date,$time,$ip,$type,$auth,$user);
+	if ( $_ =~ /$log_pattern{$mode}/ ) {
+	    eval("( $log_vars{$mode} ) = (\$1,\$2,\$3,\$4,\$5,\$6)");
+	    if ( !defined $opts{'user'} && $opts{'limit'}>=0 ) {
+		next if ( grep {/^$user$/}   @ignored_users );
+		next if ( grep {$ip =~ /$_/} @ignored_ips );
+	    }
+	    my $country_id;
+	    if (defined $opts{'geoip'} && $opts{'geoip'}) {
+		if ($geoip_pure) {
+		    ($country_id) = $geoip1->get_city_record($ip);
+		} else {
+		    my $rec = $geoip1->record_by_addr($ip);
+		    $country_id = $rec->country_code;
+		}
+	    }
+	    if (defined $opts{'nodate'}) {$date = 'all dates';}
+	    if (defined $opts{'nouser'}) {$user = 'all users';}
+	    if (defined $country_id) {
+		$foreign = 0 + !($country_id =~ /$ignored_countries/);
+	    }
+	    $found->{$date}->{$user}->{'ip'}->{$ip}++;
+	    $found->{$date}->{$user}->{'lasttime'} = $time;
+	    $found->{$date}->{$user}->{'lastip'}   = $ip;
+	    $found->{$date}->{$user}->{'foreign'}  = $foreign;
+	}
     }
   }
 };
@@ -259,19 +270,23 @@ if (defined $header) {
 # -----------------------------------------------------------------------
 sub get_handle{
 # -----------------------------------------------------------------------
-  my $fh     = *STDIN;
-  my $err    = "Opening logfile:";
-  my ($file) = (@ARGV)? $ARGV[0] : $log_file{shift()};
+  my $fh   = *STDIN;
+  my $err  = "Opening logfile:";
+  my $file = shift;
 
   if (defined $file) {
-    if ($file =~ /.+\.bz2$/) {
-        require IO::Uncompress::Bunzip2;
-        if (! ($fh = IO::Uncompress::Bunzip2->new($file)) ) {$header .= "\n$err $!";}
-    } elsif ($file =~ /.+\.gz$/) {
-        require IO::Uncompress::Gunzip;
-        if ( !($fh = IO::Uncompress::Gunzip->new($file)) )  {$header .= "\n$err $!";}
-    }  else {
-        if ( !open($fh,'<', $file) )                        {$header .= "\n$err $!";}
+    require IO::Uncompress::AnyUncompress;
+    if ( ($fh = IO::Uncompress::AnyUncompress->new($file)) ) {
+    } else {
+	if ($file =~ /.+\.bz2$/) {
+	    require IO::Uncompress::Bunzip2;
+	    if (! ($fh = IO::Uncompress::Bunzip2->new($file)) ) {$header .= "\n$err $!\n";}
+	} elsif ($file =~ /.+\.gz$/) {
+	    require IO::Uncompress::Gunzip;
+	    if ( !($fh = IO::Uncompress::Gunzip->new($file)) )  {$header .= "\n$err $!\n";}
+	}  else {
+	    if ( !open($fh,'<', $file) )                        {$header .= "\n$err $!\n";}
+	}
     }
   }
   return $fh;
