@@ -16,7 +16,7 @@ being abused.
 Currently, Exim SMTP, Dovecot POP3, IMAP, SSH, Apache, and OpenWebMail 
 authentications are supported, but more can be added relatively simply.
 
-This utility was *NOT* designed for detecting intrusion attempts. There are 
+This utility was **NOT** designed for detecting intrusion attempts. There are 
 already plenty of intrusion detection programs. This script was designed to detect 
 already compromised accounts, that (in contrary) intrusion detection usually does 
 not detect.
@@ -103,7 +103,7 @@ owns the IP address. The localizaton information can be optionally shortended wi
 the option --geoip 1, or suppressed altogether with --geoip 0
 
 
-Feb 13 -> account joedoe: 1 IPs (Last: 88.66.22.22 @ 00:13:34)
+` Feb 13 -> account joedoe: 1 IPs (Last: 88.66.22.22 @ 00:13:34)
    1     88.66.22.22       France, Lyon - Free SAS
 
 Feb 13 -> account smith: 1 IPs (Last: 65.55.41.140 @ 00:10:05)
@@ -111,7 +111,7 @@ Feb 13 -> account smith: 1 IPs (Last: 65.55.41.140 @ 00:10:05)
 
 Feb 13 -> account hill: 2 IPs (Last: 37.188.232.65 @ 00:15:16)
    1     37.188.232.65     Czech Republic - Telefonica Czech Republic, a.s.
-   1     37.188.236.46     Czech Republic - Telefonica Czech Republic, a.s.
+   1     37.188.236.46     Czech Republic - Telefonica Czech Republic, a.s.`
 
 
 
@@ -126,13 +126,13 @@ You can also submit issues, or modifications through the [GitHub repository](htt
 Thanks:
 -------
 
-Todd Lyons - for the original script detect_hacked_smtp_auth_conns.pl
+**Todd Lyons** - for the original script detect_hacked_smtp_auth_conns.pl
 
-Ivo Truxa  - the redesign, adding GeoIP support, gzip/bzip2 support
-             for uncompressing log file archives, adding the support
-             for Dovecot, SSH, OpenWebMail, Apache, and other
-             modifications, and also for creating the public repository
-             at [GitHub](https://github.com/truxoft/auth_checker)
+**Ivo Truxa**  
+   - the redesign, adding GeoIP support, gzip/bzip2 support
+   - for uncompressing log file archives, adding the support
+   - for Dovecot, SSH, OpenWebMail, Apache, and other modifications, 
+   - and also for creating the public repository at [GitHub](https://github.com/truxoft/auth_checker)
 
 
 
