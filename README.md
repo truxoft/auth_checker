@@ -102,17 +102,17 @@ country name, city (if known), and the name of the Internet Access Provider who
 owns the IP address. The localizaton information can be optionally shortended with
 the option --geoip 1, or suppressed altogether with --geoip 0
 
+<pre>
+Feb 13 -> account joedoe: 1 IPs (Last: 88.66.22.22 @ 00:13:34)
+   1     88.66.22.22       France, Lyon - Free SAS
+ 
+Feb 13 -> account smith: 1 IPs (Last: 65.55.41.140 @ 00:10:05)
+   1     65.55.41.140      United States, Redmond - Microsoft Corporation
 
-> Feb 13 -> account joedoe: 1 IPs (Last: 88.66.22.22 @ 00:13:34)
->   1     88.66.22.22       France, Lyon - Free SAS
-> 
-> Feb 13 -> account smith: 1 IPs (Last: 65.55.41.140 @ 00:10:05)
->   1     65.55.41.140      United States, Redmond - Microsoft Corporation
->
-> Feb 13 -> account hill: 2 IPs (Last: 37.188.232.65 @ 00:15:16)
->   1     37.188.232.65     Czech Republic - Telefonica Czech Republic, a.s.
->   1     37.188.236.46     Czech Republic - Telefonica Czech Republic, a.s.
-
+Feb 13 -> account hill: 2 IPs (Last: 37.188.232.65 @ 00:15:16)
+   1     37.188.232.65     Czech Republic - Telefonica Czech Republic, a.s.
+   1     37.188.236.46     Czech Republic - Telefonica Czech Republic, a.s.
+</pre>
 
 
 Contact:
