@@ -15,6 +15,8 @@ This utility was **NOT** designed for detecting intrusion attempts. There are al
 Installation:
 -------------
 
+Simply place the auth\_checker.pl to some location on your server (avoid publicly accessible folders such as the www tree), and turn on the execution permision bit on he fil. Usually the owner execution bit will be sufficient, hence mostly you will set the permission to 0700 (`chmod 0700 auth_checker.pl`). Only if other users than the owner would run the script (i.e. a non-root cronjob), you may need the permissions 0750 or 0755 (`chmod 0755 auth_checker.pl`).
+
 Required:
 - [Perl 5](http://www.perl.org/) - it certainly already is installed on your server
  
