@@ -99,14 +99,16 @@ You can also submit issues, or modifications through the [GitHub repository](htt
 Thanks:
 -------
 
-**Todd Lyons** - for the original script detect_hacked_smtp_auth_conns.pl
+**Todd Lyons** 
+   - for the original script detect_hacked_smtp_auth_conns.pl
 
 **Ivo Truxa**  
-   - the redesign, adding GeoIP support, gzip/bzip2 support
-   - for uncompressing log file archives, adding the support
-   - for Dovecot, SSH, OpenWebMail, Apache, and other modifications, 
+   - the redesign, 
+   - adding GeoIP support, 
+   - gzip/bzip2 support for uncompressing log file archives, 
+   - adding the support for Dovecot, SSH, OpenWebMail, Apache, 
+   - and other modifications, 
    - and also for creating the public repository at [GitHub](https://github.com/truxoft/auth_checker)
-
 
 
 License:
