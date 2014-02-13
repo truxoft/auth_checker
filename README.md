@@ -118,14 +118,16 @@ Feb 13 -> account hill: 2 IPs (Last: 37.188.232.65 @ 00:15:16)
 Contact:
 --------
 
-You can send your questions or kudos to Ivo Truxa <truxa@truxoft.com> 
+You can send your questions or kudos to [Ivo Truxa](mailto:truxa@truxoft.com)
+
 You can also submit issues, or modifications through the [GitHub repository](https://github.com/truxoft/auth_checker/)
 
 
 Thanks:
 -------
 
-Todd Lyons - for the original script detect\_hacked\_smtp\_auth\_conns.pl 
+Todd Lyons - for the original script detect\_hacked\_smtp\_auth\_conns.pl
+
 Ivo Truxa  - the redesign, adding GeoIP support, gzip/bzip2 support
              for uncompressing log file archives, adding the support
              for Dovecot, SSH, OpenWebMail, Apache, and other
