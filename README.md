@@ -77,14 +77,14 @@ Typical otput of the script looks as follows. The first column shows the number 
 
 ```
 Feb 13 -> account joedoe: 1 IPs (Last: 88.66.22.22 @ 00:13:34)
-   1     88.66.22.22       France, Lyon - Free SAS
+   1      88.66.22.22       France, Lyon - Free SAS
  
 Feb 13 -> account smith: 1 IPs (Last: 65.55.41.140 @ 00:10:05)
-   1     65.55.41.140      United States, Redmond - Microsoft Corporation
+   12     65.55.41.140      United States, Redmond - Microsoft Corporation
 
 Feb 13 -> account hill: 2 IPs (Last: 37.188.232.65 @ 00:15:16)
-   1     37.188.232.65     Czech Republic - Telefonica Czech Republic, a.s.
-   1     37.188.236.46     Czech Republic - Telefonica Czech Republic, a.s.
+   31     37.188.232.65     Czech Republic - Telefonica Czech Republic, a.s.
+   14     37.188.236.46     Czech Republic - Telefonica Czech Republic, a.s.
 ```
 
 
