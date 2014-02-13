@@ -1,0 +1,52 @@
+CHANGELOG for the auth_checker.pl script
+========================================
+
+The changes can be also viewed by running the script on the command line.
+with the option --changelog.
+
+
+auth_checker.pl  STMP/POP3 Authentication Abuse Detection Utility v2.03 (2014-02-13)  
+  Written by Ivo Truxa (c) 2014 <truxa@truxoft.com>                                   
+  (based on the script detect_smtp_auth_abuse.pl  by Todd Lyon (c) 2013)               
+  
+ 2.03 [Ivo Truxa] 02/13/2014                                                                    
+       - IO::Uncompress::AnyUncompress added for better compressed file support (conditional)   
+       - added wildcards support - log file names can now include wildcards                     
+       - default log file names changed to contain wildcards now                                
+       - added listung of all parsed log files to the report header                             
+ 2.02 [Ivo Truxa] 02/13/2014                                                                    
+       - negative --limit now bypasses the exception checking - all access IPs will be counted  
+         and the absolute value of the limit option will be used as the trigger                 
+       - added option --nodate for suppressing grouping of results by date                      
+       - added option --nouser for suppressing grouping of results by user                      
+       - when option --mode is set to 'all', default log files in all mode will be parsed       
+       - added usage info on wrong usage and with the -h, --help switches                       
+       - soft handling of missing log files instead of abort (importan in the 'all' mode)       
+       - Geo::IP class now added and used with priority over Geo::IP::PurePerl                  
+       - Geo::IP** and  IO::Uncompress** modules now loaded conditionally when/if needed,       
+         the script will run even without the module, just with limited functinality            
+ 2.01 [Ivo Truxa] 02/12/2014                                                                    
+       - added usage info on wrong usage and with the -h, --help switches                       
+       - added this version history  info with the --changelog switch                           
+       - added variables $version and $verdate                                                
+       - added a hash with regex patterns for parsing Exim and Dovecot logs                     
+       - added handling the mode switch for Dovecot and Exim modes                              
+       - predefined IP blocks of cellular networks loaded in dependence of $ignored_countries  
+       - added switch --user for displaying all IP addresses of the given user name             
+       - reading of gzipped and bzipped log files now possible directly                         
+       - added parsing of SSH logs (auth)                                                       
+       - added parsing of openwebmail logs (auth)                                               
+       - added parsing of apache logs (auth)                                                    
+       - added ISP name for each IP address (if found by GeoIP)                                 
+       - added option --quiet for suppressing output when no suspicious IP address found        
+       - --limit can be now set to 0, and this is now the default value (showing all)           
+       - output formatted into fixed width columns                                              
+ 2.00 [Ivo Truxa] 02/10/2014                                                                    
+       - added dovecot_plain and dovecot_login authentication type to the Exim log detection    
+       - cosmetic changes in the output, reordering/reformatting of rows and columns            
+       - GeoIP localization of all authenticated IP addresses and reporting when accounts       
+         accessed from countries no on the allowed list.                                        
+       - logging temporarily disabled                                                           
+ 1.xx [Todd Lyon] 2013   https://github.com/Exim/exim/wiki/DetectSMTPAuthAbuse                  
+  
+
