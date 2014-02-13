@@ -1,7 +1,7 @@
 auth_checker
 ============
 
-Detection of compromised or abused user accounts for multiple services
+#### Detection of compromised or abused user accounts for multiple services
 
 This script was inspired by the original Exim authentication detection script written by Todd Lyons in 2013. There are some details about it at [DetectSMTPAuthAbuse](https://github.com/Exim/exim/wiki/DetectSMTPAuthAbuse)
 
@@ -32,7 +32,7 @@ Configuration:
 
 You can configure auth\_checker by editing some of the variables at the top of the auth\_checker.pl script. Namely you will want to adjust the variables `$ignored_ips`, `$ignored_users`, `$ignored_countries`, and possibly also the list of `$ignore_ISPs`. The later is a list of cellular providers with frequently changing dynamic IP addresses, an it is at the bottom of the script. These lists are regular expressions. Look up the syntax for regular expressions in Perl, when in doubts. It is possible that in a later version, there will be a separate configuration file with a simper syntax.
 
-Yu may need to modif also the paths to the GeoIP databases, and to the default log files
+You may need to modify also the paths to the GeoIP databases `$geoip_db_path`, and to the default log files `%log_file` - those variables are equally at the top of the script.
 
 Various option can be changed directly on the command line when calling the script. Type `./auth_checker.pl -h` on the command line to see the list of available options and see the *Examples* section below in ths document.
 
