@@ -5,7 +5,7 @@ Detection of compromised or abused user accounts for multiple services
 
 This script was inspired by the original Exim authentication detection script 
 written by Todd Lyons in 2013. There are some details about it at 
-https://github.com/Exim/exim/wiki/DetectSMTPAuthAbuse
+[DetectSMTPAuthAbuse](https://github.com/Exim/exim/wiki/DetectSMTPAuthAbuse)
 
 The purpose of the script is the detection of user accounts accessed in unusual 
 patterns - either from countries not on the whitelist, or from not explicitly 
@@ -26,7 +26,7 @@ Installation:
 -------------
 This is a Perl script, and except the basic Perl functionality you need also the 
 Geo-IP-PurePerl module including current GeoIP databases. For installation hints,
-please visit http://search.cpan.org/~borisz/Geo-IP-PurePerl-1.25/lib/Geo/IP/PurePerl.pm
+please visit [Geo::IP](http://search.cpan.org/~borisz/Geo-IP-1.43/lib/Geo/IP.pm) or [Geo::IP::PurePerl](http://search.cpan.org/~borisz/Geo-IP-PurePerl-1.25/lib/Geo/IP/PurePerl.pm)
 
 
 Configuration:
