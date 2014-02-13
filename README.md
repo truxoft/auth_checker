@@ -3,45 +3,36 @@ auth_checker
 
 Detection of compromised or abused user accounts for multiple services
 
-This script was inspired by the original Exim authentication detection script 
-written by Todd Lyons in 2013. There are some details about it at 
-[DetectSMTPAuthAbuse](https://github.com/Exim/exim/wiki/DetectSMTPAuthAbuse)
+This script was inspired by the original Exim authentication detection script written by Todd Lyons in 2013. There are some details about it at [DetectSMTPAuthAbuse](https://github.com/Exim/exim/wiki/DetectSMTPAuthAbuse)
 
-The purpose of the script is the detection of user accounts accessed in unusual 
-patterns - either from countries not on the whitelist, or from not explicitly 
-whitelisted IP addresses, or from a higher number of unknown IP addresses than 
-specified. In other words, it can help detecting compromised accounts already 
-being abused.
+The purpose of the script is the detection of user accounts accessed in unusual patterns - either from countries not on the whitelist, or from not explicitly whitelisted IP addresses, or from a higher number of unknown IP addresses than specified. In other words, it can help detecting compromised accounts already being abused.
 
-Currently, Exim SMTP, Dovecot POP3, IMAP, SSH, Apache, and OpenWebMail 
-authentications are supported, but more can be added relatively simply.
+Currently, Exim SMTP, Dovecot POP3, IMAP, SSH, Apache, and OpenWebMail authentications are supported, but more can be added relatively simply.
 
-This utility was **NOT** designed for detecting intrusion attempts. There are 
-already plenty of intrusion detection programs. This script was designed to detect 
-already compromised accounts, that (in contrary) intrusion detection usually does 
-not detect.
+This utility was **NOT** designed for detecting intrusion attempts. There are already plenty of intrusion detection programs. This script was designed to detect already compromised accounts, that (in contrary) intrusion detection usually does not detect.
 
 
 Installation:
 -------------
-This is a Perl script, and except the basic Perl functionality you need also the 
-Geo-IP-PurePerl module including current GeoIP databases. For installation hints,
-please visit [Geo::IP](http://search.cpan.org/~borisz/Geo-IP-1.43/lib/Geo/IP.pm) or [Geo::IP::PurePerl](http://search.cpan.org/~borisz/Geo-IP-PurePerl-1.25/lib/Geo/IP/PurePerl.pm)
+
+Required:
+- [Perl 5](http://www.perl.org/) - it certainly already is installed on your server
+ 
+Optional:
+- Perl modules [Geo::IP](http://search.cpan.org/~borisz/Geo-IP-1.43/lib/Geo/IP.pm) (faster, more recent) or [Geo::IP::PurePerl](http://search.cpan.org/~borisz/Geo-IP-PurePerl-1.25/lib/Geo/IP/PurePerl.pm). 
+- Perl modules [IO::Uncompress::Gunzip](http://search.cpan.org/search?query=Gunzip&mode=module) and/or [IO::Uncompress::Bunzip2](http://search.cpan.org/search?query=Bunzip2&mode=module)
+
+One of the Geo-IP modules is necessary only if you want the localization and ISP information in the reports (highly recommended). The Gunzip Bunzip2 modules are needed if you want to parse archived compressed log files without having to unzip them first. The uncompression modules are usually already included in the basic Perl installation. GeoIP typically needs to be installed, but it is possible that another application on your server required it, and one of the modules is already available. Just make sure to keep our GeoIP databases up-to-date, there are free monthly updates available at [MaxMind](http://dev.maxmind.com/geoip/geolite). The script needs the GeoLiteCity.dat and the GeoIPASNum.dat files.
 
 
 Configuration:
 --------------
 
-You can configure auth_checker by editing some of the variables directly in the 
-auth\_checker.pl script. Namely you will want to adjust the variables ignored\_ips,
-ignored\_users, ignored\_countries, and possibly also the list of ignore_ISPs. 
-These lists are regular expressions. Look up the syntax for regular expressions 
-in Perl, when in doubts. It is possible that in a later version, there will be
-a separate configuration file with a simper syntax.
+You can configure auth\_checker by editing some of the variables at the top of the auth\_checker.pl script. Namely you will want to adjust the variables ignored\_ips, ignored\_users, ignored\_countries, and possibly also the list of ignore_ISPs. The later is a list of cellular providers with frequently changing dynamic IP addresses, an it is at the bottom of the script. These lists are regular expressions. Look up the syntax for regular expressions in Perl, when in doubts. It is possible that in a later version, there will be a separate configuration file with a simper syntax.
 
-Other parameters can be changed directly on the command line when calling the script.
-Type "./auth_checker.pl -h" on the command line to see the list of available
-options.
+Yu may need to modif also the paths to the GeoIP databases, and to the default log files
+
+Various option can be changed directly on the command line when calling the script. Type "./auth_checker.pl -h" on the command line to see the list of available options and see the *Examples* section below in ths document.
 
 
 Examples of use:
