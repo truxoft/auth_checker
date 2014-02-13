@@ -126,7 +126,7 @@ You can also submit issues, or modifications through the [GitHub repository](htt
 Thanks:
 -------
 
-Todd Lyons - for the original script detect\_hacked\_smtp\_auth\_conns.pl
+Todd Lyons - for the original script detect_hacked_smtp_auth_conns.pl
 
 Ivo Truxa  - the redesign, adding GeoIP support, gzip/bzip2 support
              for uncompressing log file archives, adding the support
