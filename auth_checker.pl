@@ -65,6 +65,8 @@ my $u2 = "  usage: detect_auth_abuse.pl [options...] [logfile]                  
          "                          '/var/log/auth' for mode ssh, and                            \n".
          "                          '/var/log/httpd/access.log' for mode apache                  \n";
 my $changelog =
+" 2.04 [Moritz Kobel] 05/07/2014                                                                 \n".
+"       - added support for different exim login configuration names                             \n".
 " 2.03 [Ivo Truxa] 02/13/2014                                                                    \n".
 "       - IO::Uncompress::AnyUncompress added for better compressed file support (conditional)   \n".
 "       - added wildcards support - log file names can now include wildcards                     \n".
@@ -140,7 +142,7 @@ my %log_vars      = (
         'apache'  => '$ip,   $user, $date, $time'
 );
 my %log_pattern   = (
-        'exim'    => '^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}).*H=.*\[(\d+\.\d+\.\d+\.\d+)\].*A=(?:(dovecot_)?(plain|login)):([^ ]+)',
+        'exim'    => '^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}).*H=.*\[(\d+\.\d+\.\d+\.\d+)\].*A=(?:(dovecot_|ldap_)?(plain|login|fixed_cram|fixed_login|plain_login)):([^ ]+)',
         'dovecot' => '^(\w{3} .\d) (\d{2}:\d{2}:\d{2}) \w+ dovecot: (pop3|imap)-login: Login: user=\<(.*)\>,.+ rip=(\d+\.\d+\.\d+\.\d+), ',
         'ssh'     => '^(\w{3} .\d) (\d{2}:\d{2}:\d{2}) \w+ sshd\[\d+\]: Accepted (\S+) for (\w+) from (\d+\.\d+\.\d+\.\d+) port \d+ ssh.\s*$',
         'openwm'  => '^\w{3} (\w{3} .\d) (\d{2}:\d{2}:\d{2}) \d{4} - \[\d+\] \((\d+\.\d+\.\d+\.\d+)\) (\w+) - login - ',

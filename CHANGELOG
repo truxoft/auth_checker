@@ -8,7 +8,9 @@ with the option --changelog.
 auth_checker.pl  STMP/POP3 Authentication Abuse Detection Utility v2.03 (2014-02-13)  
   Written by Ivo Truxa (c) 2014 <truxa@truxoft.com>                                   
   (based on the script detect_smtp_auth_abuse.pl  by Todd Lyon (c) 2013)               
-  
+
+ 2.04 [Moritz Kobel] 05/07/2014                                                                 
+       - added support for different exim login configuration names    
  2.03 [Ivo Truxa] 02/13/2014                                                                    
        - IO::Uncompress::AnyUncompress added for better compressed file support (conditional)   
        - added wildcards support - log file names can now include wildcards                     
