@@ -19,6 +19,7 @@ my %log_files         = (
         'ssh'         => '/var/log/auth.log*',
         'openwm'      => '/var/log/openwebmail.log*',
         'apache'      => '/var/log/httpd/access.log*',
+        'courier'     => '/var/log/mail.info*',
         'all'         => 'default log files'
 );
 push(@ignored_ips, &ignore_ISPs);
@@ -48,7 +49,7 @@ my $u2 = "  usage: detect_auth_abuse.pl [options...] [logfile]                  
          "                          default 0;   exceptions defined in the script not counted    \n".
          "                          uness limit is less than 0 (exceptions will be counted too)  \n".
          "        -q, --quiet       shows no output when no matching IP address found            \n".
-         "        -m, --mode <name> set to exim, dovecot, ssh, or apache mode (default exim)     \n".
+         "        -m, --mode <name> set to exim, dovecot, ssh, courier, or apache mode (default exim)\n".
          "                          set to  all  to parse default log files of all modes         \n".
          "        -u, --user <name> list all IP addresses of given user                          \n".
          "        --nodate          Do not group the access data by date                         \n".
@@ -63,6 +64,7 @@ my $u2 = "  usage: detect_auth_abuse.pl [options...] [logfile]                  
          "     logfile              by default '/var/log/exim/mainlog' for mode exim,            \n".
          "                          '/var/log/maillog' for mode dovecot,                         \n".
          "                          '/var/log/auth' for mode ssh, and                            \n".
+         "                          '/var/log/mail.info' for mode courier, and                   \n".
          "                          '/var/log/httpd/access.log' for mode apache                  \n";
 my $changelog =
 " 2.03 [Ivo Truxa] 02/13/2014                                                                    \n".
@@ -121,7 +123,7 @@ $opts{'changelog'} and myend("$u1  \n$changelog  \n");
 $opts{'version'}   and myend("auth_checker v$version ($verdate)  \n");
 $opts{'limit'} = ( defined $opts{'limit'} )? $opts{'limit'} : 0;
 $opts{'geoip'} = ( defined $opts{'geoip'} && $opts{'geoip'}>=0 )? $opts{'geoip'} : 2;
-$opts{'mode'}  = ( defined $opts{'mode'}  && $opts{'mode'}=~/all|exim|dovecot|ssh|openwm|apache/ )? $opts{'mode'} : 'exim';
+$opts{'mode'}  = ( defined $opts{'mode'}  && $opts{'mode'}=~/all|exim|dovecot|ssh|openwm|apache|courier/ )? $opts{'mode'} : 'exim';
 # -----------------------------------------------------------------------
 
 # Sample log lines:
@@ -130,21 +132,24 @@ $opts{'mode'}  = ( defined $opts{'mode'}  && $opts{'mode'}=~/all|exim|dovecot|ss
 # SSH:          Jan 19 00:01:51 myhost sshd[40547]: Accepted keyboard-interactive/pam for somename from 55.66.77.88 port 2955 ssh2
 # OpenWebMail:  Fri Feb  7 20:05:36 2014 - [33236] (11.222.33.44) info - login - info@doman.com*webmail.domain.com-session-0.247656818802596 - active=0,0,0
 # APACHE:       111.222.33.44 - username [12/Feb/2014:20:20:34 +0100] "GET /path/page.htm HTTP/1.1" 200 1794"
+# COURIER:      Nov 16 01:33:25 mail pop3d-ssl: LOGIN, user=usernm, ip=[::ffff:11.222.33.44], port=[50111]
 
-my @modes         = ('exim','dovecot','ssh','openwm');
+my @modes         = ('exim','dovecot','ssh','openwm','courier');
 my %log_vars      = (
         'exim'    => '$date, $time, $ip,   $type, $auth, $user',
         'dovecot' => '$date, $time, $auth, $user, $ip',
         'ssh'     => '$date, $time, $auth, $user, $ip',
         'openwm'  => '$date, $time, $ip,   $user',
-        'apache'  => '$ip,   $user, $date, $time'
+        'apache'  => '$ip,   $user, $date, $time',
+        'courier' => '$date, $time, $auth, $user, $ip'
 );
 my %log_pattern   = (
         'exim'    => '^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}).*H=.*\[(\d+\.\d+\.\d+\.\d+)\].*A=(?:(dovecot_)?(plain|login)):([^ ]+)',
         'dovecot' => '^(\w{3} .\d) (\d{2}:\d{2}:\d{2}) \w+ dovecot: (pop3|imap)-login: Login: user=\<(.*)\>,.+ rip=(\d+\.\d+\.\d+\.\d+), ',
         'ssh'     => '^(\w{3} .\d) (\d{2}:\d{2}:\d{2}) \w+ sshd\[\d+\]: Accepted (\S+) for (\w+) from (\d+\.\d+\.\d+\.\d+) port \d+ ssh.\s*$',
         'openwm'  => '^\w{3} (\w{3} .\d) (\d{2}:\d{2}:\d{2}) \d{4} - \[\d+\] \((\d+\.\d+\.\d+\.\d+)\) (\w+) - login - ',
-        'apache'  => '^(\d+\.\d+\.\d+\.\d+) - (\w+) \[(\d{2}/\w{3}/\d{4}):(\d{2}:\d{2}:\d{2}) [+-]\d+\] '
+        'apache'  => '^(\d+\.\d+\.\d+\.\d+) - (\w+) \[(\d{2}/\w{3}/\d{4}):(\d{2}:\d{2}:\d{2}) [+-]\d+\] ',
+        'courier' => '^(\w{3} .\d) (\d{2}:\d{2}:\d{2}) \w+ (pop3d-ssl|pop3d|imapd|imapd-ssl): LOGIN, user=(\w+), ip=\[::ffff:(\d+\.\d+\.\d+\.\d+)\],'
 );
 if ( !($opts{'mode'} =~ /all/) ) {
     @modes = ($opts{'mode'});
