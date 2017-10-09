@@ -240,7 +240,7 @@ for my $date  (sort keys %$found) {
                     $isp         = $geoip2->isp_by_addr($ip);
                 } else {
                     $r           = $geoip1->record_by_addr($ip);
-                    $isp         = $geoip2->org_by_addr($ip);
+                    $isp         = $geoip2->org_by_addr($ip) || '';
                     $c2          = $r->country_code;
                     $country     = $r->country_name;
                     $city        = $r->city;
